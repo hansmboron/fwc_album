@@ -14,6 +14,22 @@ mixin Messages<T extends StatefulWidget> on State<T> {
     );
   }
 
-  void showInfo(String message) {}
-  void showSuccess(String message) {}
+  void showInfo(String message) {
+    showTopSnackBar(
+      context,
+      CustomSnackBar.info(
+        message: message,
+      ),
+    );
+  }
+
+  void showSuccess(String message) {
+    showTopSnackBar(
+      context,
+      CustomSnackBar.success(
+        message: message,
+        backgroundColor: context.colors.primary,
+      ),
+    );
+  }
 }

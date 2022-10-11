@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:fwc_album_app/app/core/ui/helpers/loader.dart';
 import 'package:fwc_album_app/app/core/ui/helpers/messages.dart';
 import 'package:fwc_album_app/app/core/ui/styles/button_styles.dart';
+import 'package:fwc_album_app/app/core/ui/styles/colors_app.dart';
+import 'package:fwc_album_app/app/core/ui/styles/text_styles.dart';
+import 'package:fwc_album_app/app/core/ui/widgets/button.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -14,28 +17,50 @@ class _SplashPageState extends State<SplashPage>
     with Loader<SplashPage>, Messages<SplashPage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Splash Page'),
-      ),
-      body: Center(
-        child: Column(
+      backgroundColor: context.colors.primary,
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/background_splash.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Stack(
           children: [
-            ElevatedButton(
-              onPressed: () async {
-                showLoader();
-                await Future.delayed(const Duration(seconds: 3));
-                hideLoader();
-              },
-              style: ButtonStyles.i.primaryButton,
-              child: const Text('Salvar'),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.only(
+                  top: size.height * .08,
+                ),
+                child: Image.asset(
+                  'assets/images/fifa_logo.png',
+                  height: size.height * .25,
+                ),
+              ),
             ),
-            OutlinedButton(
-              onPressed: () {
-                showError('Erro bem loco');
-              },
-              style: ButtonStyles.i.primaryOutLineButton,
-              child: const Text('Salvar'),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(bottom: size.height * .19),
+                child: Button(
+                  label: 'Acessar',
+                  width: size.width * .9,
+                  onPressed: () {},
+                  style: context.buttonStyles.yellowButton,
+                  labelStyle:
+                      context.textStyles.textSecondaryFontExtraBoldPrimaryColor,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 20),
+                child: Image.asset('assets/images/bandeiras.png'),
+              ),
             ),
           ],
         ),
