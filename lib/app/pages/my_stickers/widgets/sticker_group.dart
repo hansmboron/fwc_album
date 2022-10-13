@@ -1,11 +1,19 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:fwc_album_app/app/core/ui/styles/colors_app.dart';
 
+import 'package:fwc_album_app/app/core/ui/styles/colors_app.dart';
 import 'package:fwc_album_app/app/core/ui/styles/text_styles.dart';
+import 'package:fwc_album_app/app/models/groups_stickers.dart';
+import 'package:fwc_album_app/app/models/user_sticker_model.dart';
 
 class StickerGroup extends StatelessWidget {
-  const StickerGroup({Key? key}) : super(key: key);
+  final GroupsStickers group;
+
+  const StickerGroup({
+    Key? key,
+    required this.group,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +32,21 @@ class StickerGroup extends StatelessWidget {
                   widthFactor: 1,
                   heightFactor: 0.1,
                   alignment: const Alignment(0, -0.1),
-                  child: Image.asset(
-                    'assets/images/flags/BRA.png',
-                    cacheWidth:
-                        (MediaQuery.of(context).size.width * 1.7).toInt(),
+                  child: CachedNetworkImage(
+                    fit: BoxFit.cover,
+                    imageUrl: group.flag,
+                    width: MediaQuery.of(context).size.width * 2,
                   ),
+                  // child: Image.network(
+                  //   group.flag,
+                  //   cacheWidth: (MediaQuery.of(context).size.width * 2).toInt(),
+                  // ),
                 ),
               ),
             ),
           ),
           Text(
-            'Brasil',
+            group.countryName,
             style: context.textStyles.titleBlack.copyWith(
               fontSize: 26,
             ),
@@ -49,7 +61,17 @@ class StickerGroup extends StatelessWidget {
               mainAxisSpacing: 8,
             ),
             itemBuilder: (context, index) {
-              return Sticker(index: index);
+              final stickerNumber = '${group.stickersStart + index}';
+              final stickerList = group.stickers
+                  .where((sticker) => sticker.stickerNumber == stickerNumber);
+              final sticker = stickerList.isNotEmpty ? stickerList.first : null;
+
+              return Sticker(
+                stickerNumber: stickerNumber,
+                sticker: sticker,
+                countryName: group.countryName,
+                countryCode: group.countryCode,
+              );
             },
           ),
         ],
@@ -59,11 +81,17 @@ class StickerGroup extends StatelessWidget {
 }
 
 class Sticker extends StatelessWidget {
-  final int index;
+  final String stickerNumber;
+  final UserStickerModel? sticker;
+  final String countryName;
+  final String countryCode;
 
   const Sticker({
     Key? key,
-    required this.index,
+    required this.stickerNumber,
+    required this.sticker,
+    required this.countryName,
+    required this.countryCode,
   }) : super(key: key);
 
   @override
@@ -72,12 +100,12 @@ class Sticker extends StatelessWidget {
       onTap: () {},
       child: Container(
         decoration: BoxDecoration(
-          color: index % 2 == 0 ? context.colors.primary : Colors.grey,
+          color: sticker != null ? context.colors.primary : Colors.grey,
         ),
         child: Column(
           children: [
             Visibility(
-              visible: index % 2 == 0,
+              visible: (sticker?.duplicate ?? 0) > 0,
               maintainSize: true,
               maintainAnimation: true,
               maintainState: true,
@@ -85,7 +113,7 @@ class Sticker extends StatelessWidget {
                 alignment: Alignment.topRight,
                 padding: const EdgeInsets.all(2),
                 child: Text(
-                  '1',
+                  '${sticker?.duplicate ?? 0}',
                   style: context.textStyles.textSecondaryFontMedium.copyWith(
                     color: context.colors.yellow,
                   ),
@@ -93,15 +121,15 @@ class Sticker extends StatelessWidget {
               ),
             ),
             Text(
-              'BRA',
+              countryCode,
               style: context.textStyles.textSecondaryFontExtraBold.copyWith(
-                color: index % 2 == 0 ? Colors.white : Colors.black,
+                color: sticker != null ? Colors.white : Colors.black,
               ),
             ),
             Text(
-              '$index',
+              stickerNumber,
               style: context.textStyles.textSecondaryFontExtraBold.copyWith(
-                color: index % 2 == 0 ? Colors.white : Colors.black,
+                color: sticker != null ? Colors.white : Colors.black,
               ),
             ),
           ],

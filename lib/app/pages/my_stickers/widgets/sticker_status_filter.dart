@@ -26,24 +26,40 @@ class StickerStatusFilter extends StatelessWidget {
           Button(
             width: size.width * .3,
             onPressed: () {},
-            style: context.buttonStyles.yellowButton,
-            labelStyle: context.textStyles.textSecondaryFontMedium.copyWith(
-              color: context.colors.primary,
-            ),
+            style: filterSelected == 'all'
+                ? context.buttonStyles.yellowButton
+                : context.buttonStyles.primaryButton,
+            labelStyle: filterSelected == 'all'
+                ? context.textStyles.textSecondaryFontMedium.copyWith(
+                    color: context.colors.primary,
+                  )
+                : context.textStyles.textSecondaryFontMedium,
             label: 'Todas',
           ),
           Button(
             width: size.width * .3,
             onPressed: () {},
-            style: context.buttonStyles.primaryButton,
-            labelStyle: context.textStyles.textSecondaryFontMedium,
+            style: filterSelected == 'missing'
+                ? context.buttonStyles.yellowButton
+                : context.buttonStyles.primaryButton,
+            labelStyle: filterSelected == 'missing'
+                ? context.textStyles.textSecondaryFontMedium.copyWith(
+                    color: context.colors.primary,
+                  )
+                : context.textStyles.textSecondaryFontMedium,
             label: 'Faltando',
           ),
           Button(
             width: size.width * .3,
             onPressed: () {},
-            style: context.buttonStyles.primaryButton,
-            labelStyle: context.textStyles.textSecondaryFontMedium,
+            style: filterSelected == 'repeated'
+                ? context.buttonStyles.yellowButton
+                : context.buttonStyles.primaryButton,
+            labelStyle: filterSelected == 'repeated'
+                ? context.textStyles.textSecondaryFontMedium.copyWith(
+                    color: context.colors.primary,
+                  )
+                : context.textStyles.textSecondaryFontMedium,
             label: 'Repetidas',
           ),
         ],
