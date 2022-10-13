@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:fwc_album_app/app/pages/my_stickers/widgets/sticker_group.dart';
+import 'package:fwc_album_app/app/pages/my_stickers/widgets/sticker_group_filter.dart';
+
+import 'widgets/sticker_status_filter.dart';
 
 class MyStickersPage extends StatefulWidget {
   const MyStickersPage({Key? key}) : super(key: key);
@@ -12,9 +16,28 @@ class _MyStickersPageState extends State<MyStickersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Sticker page'),
+        title: const Text('Minhas Figurinhas'),
       ),
-      body: Container(),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Column(
+              children: const [
+                StickerStatusFilter(filterSelected: ''),
+                StickerGroupFilter(),
+              ],
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) {
+                return const StickerGroup();
+              },
+              childCount: 10,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
