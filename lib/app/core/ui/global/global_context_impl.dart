@@ -18,7 +18,7 @@ class GlobalContextImpl implements GlobalContext {
   @override
   Future<void> loginExpire() async {
     final sp = await SharedPreferences.getInstance();
-    sp.remove('accessToken');
+    sp.clear();
     showTopSnackBar(
       navigatorKey.currentState!.context,
       CustomSnackBar.error(
