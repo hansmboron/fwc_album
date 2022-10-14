@@ -11,11 +11,13 @@ abstract class MyStickerViewImpl extends State<MyStickersPage>
     implements MyStickerView {
   var album = <GroupsStickers>[];
   var statusFilter = 'all';
+  var countries = <String, String>{};
 
   @override
   void initState() {
     widget.presenter.view = this;
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      showLoader();
       widget.presenter.getMyAlbum();
     });
     super.initState();
@@ -26,8 +28,12 @@ abstract class MyStickerViewImpl extends State<MyStickersPage>
 
   @override
   void loadedPage(List<GroupsStickers> album) {
+    hideLoader();
     setState(() {
       this.album = album;
+      countries = {
+        for (var c in album) c.countryCode: c.countryName,
+      };
     });
   }
 
@@ -35,6 +41,14 @@ abstract class MyStickerViewImpl extends State<MyStickersPage>
   void updateStatusFilter(status) {
     setState(() {
       statusFilter = status;
+    });
+  }
+
+  @override
+  void updateAlbum(List<GroupsStickers> album) {
+    hideLoader();
+    setState(() {
+      this.album = album;
     });
   }
 }

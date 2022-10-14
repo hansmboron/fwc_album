@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 import 'package:fwc_album_app/app/pages/my_stickers/presenter/my_stickers_presenter.dart';
@@ -33,7 +32,7 @@ class _MyStickersPageState extends MyStickerViewImpl {
             child: Column(
               children: [
                 StickerStatusFilter(filterSelected: statusFilter),
-                const StickerGroupFilter(),
+                StickerGroupFilter(countries: countries),
               ],
             ),
           ),
@@ -41,7 +40,7 @@ class _MyStickersPageState extends MyStickerViewImpl {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final group = album[index];
-                return StickerGroup(group: group);
+                return StickerGroup(group: group, statusFilter: statusFilter);
               },
               childCount: album.length,
             ),

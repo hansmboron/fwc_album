@@ -9,6 +9,8 @@ class MyStickersPresenterImpl implements MyStickersPresenter {
   final StickersRepository stickersRepository;
   late final MyStickerView _view;
   var album = <GroupsStickers>[];
+  var statusSelected = 'all';
+  List<String>? countries;
 
   MyStickersPresenterImpl({
     required this.stickersRepository,
@@ -24,8 +26,23 @@ class MyStickersPresenterImpl implements MyStickersPresenter {
   set view(MyStickerView view) => _view = view;
 
   @override
-  Future<void> statusFilter() {
-    // TODO: implement statusFilter
-    throw UnimplementedError();
+  Future<void> statusFilter(String status) async {
+    statusSelected = status;
+    _view.updateStatusFilter(status);
+  }
+
+  @override
+  void countryFilter(List<String>? countries) {
+    this.countries = countries;
+    if (countries == null) {
+      // atualizar a tela com todos os grupos
+      _view.updateAlbum(album);
+    } else {
+      // atualizar a minha lista filtrando os grtupos selecionados
+      final albumFilter = [
+        ...album.where((element) => countries.contains(element.countryCode))
+      ];
+      _view.updateAlbum(albumFilter);
+    }
   }
 }
