@@ -113,7 +113,9 @@ class Sticker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).pushNamed('/sticker-detail');
+      },
       child: Container(
         decoration: BoxDecoration(
           color: sticker != null ? context.colors.primary : Colors.grey,
