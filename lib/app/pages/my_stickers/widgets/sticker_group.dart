@@ -1,11 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_getit/flutter_getit.dart';
 import 'package:fwc_album_app/app/core/ui/styles/colors_app.dart';
 import 'package:fwc_album_app/app/core/ui/styles/text_styles.dart';
 import 'package:fwc_album_app/app/models/groups_stickers.dart';
 import 'package:fwc_album_app/app/models/user_sticker_model.dart';
+import 'package:fwc_album_app/app/pages/my_stickers/presenter/my_stickers_presenter.dart';
 
 class StickerGroup extends StatelessWidget {
   final GroupsStickers group;
@@ -21,11 +22,12 @@ class StickerGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(
-            height: 64,
+            height: 70,
             child: OverflowBox(
               maxWidth: double.infinity,
               maxHeight: double.infinity,
@@ -56,11 +58,12 @@ class StickerGroup extends StatelessWidget {
           GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
-            itemCount: 8,
+            itemCount: group.stickersEnd,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
+              crossAxisCount: 5,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
+              childAspectRatio: .8,
             ),
             itemBuilder: (context, index) {
               final stickerNumber = '${group.stickersStart + index}';
@@ -113,8 +116,18 @@ class Sticker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).pushNamed('/sticker-detail');
+      onTap: () async {
+        final presenter = context.get<MyStickersPresenter>();
+        await Navigator.of(context).pushNamed(
+          '/sticker-detail',
+          arguments: {
+            'countryCode': countryCode,
+            'stickerNumber': stickerNumber,
+            'countryName': countryName,
+            'stickerUser': sticker,
+          },
+        );
+        presenter.refresh();
       },
       child: Container(
         decoration: BoxDecoration(
@@ -129,11 +142,12 @@ class Sticker extends StatelessWidget {
               maintainState: true,
               child: Container(
                 alignment: Alignment.topRight,
-                padding: const EdgeInsets.all(2),
+                padding: const EdgeInsets.only(right: 2),
                 child: Text(
                   '${sticker?.duplicate ?? 0}',
                   style: context.textStyles.textSecondaryFontMedium.copyWith(
                     color: context.colors.yellow,
+                    fontSize: 12,
                   ),
                 ),
               ),

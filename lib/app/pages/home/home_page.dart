@@ -38,73 +38,62 @@ class _HomePageState extends HomeViewImpl {
           ),
         ],
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/background.png'),
-            fit: BoxFit.cover,
-          ),
-        ),
-        child: LayoutBuilder(
-          builder: (_, constrains) {
-            return ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constrains.maxHeight),
-              child: Center(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: Image.asset(
-                          'assets/images/bola.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      StickerPercent(percent: user?.totalCompletePercent ?? 0),
-                      const SizedBox(height: 20),
-                      Text(
-                        '${user?.totalStickers ?? 0} Figurinhas',
-                        style: context.textStyles.titleWhite,
-                      ),
-                      const SizedBox(height: 20),
-                      StatusTile(
-                        icon: Image.asset('assets/images/all_icon.png'),
-                        label: 'Todas',
-                        value: user?.totalAlbum ?? 0,
-                      ),
-                      const SizedBox(height: 20),
-                      StatusTile(
-                        icon: Image.asset('assets/images/missing_icon.png'),
-                        label: 'Faltando',
-                        value: user?.totalComplete ?? 0,
-                      ),
-                      const SizedBox(height: 20),
-                      StatusTile(
-                        icon: Image.asset('assets/images/repeated_icon.png'),
-                        label: 'Repetidas',
-                        value: user?.totalDuplicates ?? 0,
-                      ),
-                      const SizedBox(height: 20),
-                      Button(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed('/my-stickers');
-                        },
-                        width: MediaQuery.of(context).size.width * .9,
-                        style: context.buttonStyles.yellowOutLineButton,
-                        labelStyle: context
-                            .textStyles.textSecondaryFontExtraBold
-                            .copyWith(
-                          color: context.colors.yellow,
-                        ),
-                        label: 'Minhas Figurinhas',
-                      ),
-                    ],
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await widget.presenter.getUserData();
+        },
+        child: ListView(
+          children: [
+            Column(
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(bottom: 20, top: 8),
+                  child: Image.asset(
+                    'assets/images/bola.png',
+                    fit: BoxFit.cover,
                   ),
                 ),
-              ),
-            );
-          },
+                StickerPercent(percent: user?.totalCompletePercent ?? 0),
+                const SizedBox(height: 20),
+                Text(
+                  '${user?.totalStickers ?? 0} Figurinhas',
+                  style: context.textStyles.titleWhite,
+                ),
+                const SizedBox(height: 20),
+                StatusTile(
+                  icon: Image.asset('assets/images/all_icon.png'),
+                  label: 'Todas',
+                  value: user?.totalAlbum ?? 0,
+                ),
+                const SizedBox(height: 20),
+                StatusTile(
+                  icon: Image.asset('assets/images/missing_icon.png'),
+                  label: 'Faltando',
+                  value: user?.totalComplete ?? 0,
+                ),
+                const SizedBox(height: 20),
+                StatusTile(
+                  icon: Image.asset('assets/images/repeated_icon.png'),
+                  label: 'Repetidas',
+                  value: user?.totalDuplicates ?? 0,
+                ),
+                const SizedBox(height: 20),
+                Button(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/my-stickers');
+                  },
+                  width: MediaQuery.of(context).size.width * .9,
+                  style: context.buttonStyles.yellowOutLineButton,
+                  labelStyle:
+                      context.textStyles.textSecondaryFontExtraBold.copyWith(
+                    color: context.colors.yellow,
+                  ),
+                  label: 'Minhas Figurinhas',
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );
